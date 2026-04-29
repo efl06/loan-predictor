@@ -6,9 +6,9 @@ import sklearn
 
 # load the trained model and scaler
 try:
-    with open("/content/regression.pkl", "rb") as file:
+    with open("regression.pkl", "rb") as file:
         model = pickle.load(file)
-    with open("/content/scaler.pkl", "rb") as file:
+    with open("scaler.pkl", "rb") as file:
         scaler = pickle.load(file)
 except FileNotFoundError:
     st.error("model or scaler file not found. please ensure 'regression.pkl' and 'scaler.pkl' are in /content/")
