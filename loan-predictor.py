@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import streamlit as st
 import pickle
@@ -7,9 +6,9 @@ import sklearn
 
 # load the trained model and scaler
 try:
-    with open("regression.pkl", "rb") as file:
+    with open("/content/regression.pkl", "rb") as file:
         model = pickle.load(file)
-    with open("scaler.pkl", "rb") as file:
+    with open("/content/scaler.pkl", "rb") as file:
         scaler = pickle.load(file)
 except FileNotFoundError:
     st.error("model or scaler file not found. please ensure 'regression.pkl' and 'scaler.pkl' are in /content/")
@@ -24,6 +23,7 @@ st.markdown(
 st.header("Enter Loan Applicant's Details:")
 
 # input fields for numerical values (with realistic ranges from EDA)
+granted_loan_amount = st.slider("Granted Loan Amount", min_value=1000, max_value=200000, value=50000, step=1000)
 requested_loan_amount = st.slider("Requested Loan Amount", min_value=1000, max_value=250000, value=60000, step=1000)
 fico_score = st.slider("FICO Score", min_value=300, max_value=850, value=650, step=1)
 monthly_gross_income = st.slider("Monthly Gross Income", min_value=500.0, max_value=20000.0, value=3000.0, step=100.0)
@@ -52,6 +52,8 @@ applications = 1
 
 # create the input data as a DataFrame
 input_data = pd.DataFrame({
+    "applications": [applications],
+    "Granted_Loan_Amount": [granted_loan_amount],
     "Requested_Loan_Amount": [requested_loan_amount],
     "FICO_score": [fico_score],
     "Monthly_Gross_Income": [monthly_gross_income],
@@ -68,7 +70,7 @@ input_data = pd.DataFrame({
 
 # 1. separate numerical features for scaling
 numerical_features_to_scale = [
-    'Requested_Loan_Amount', 'FICO_score',
+    'Granted_Loan_Amount', 'Requested_Loan_Amount', 'FICO_score',
     'Monthly_Gross_Income', 'Monthly_Housing_Payment'
 ]
 input_data[numerical_features_to_scale] = scaler.transform(input_data[numerical_features_to_scale])
